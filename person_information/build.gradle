@@ -1,0 +1,86 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id "org.jetbrains.kotlin.plugin.allopen"
+    id 'io.quarkus'
+}
+
+repositories {
+    mavenCentral() {
+        content {
+            excludeGroup('info.cepheus')
+        }
+    }
+    mavenLocal()
+}
+
+dependencies {
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation enforcedPlatform("${axonPlatformGroupId}:${axonPlatformArtifactId}:${axonPlatformVersion}")
+    // open api
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+
+    // jdbc
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+
+    // flyway migration
+    implementation 'io.quarkus:quarkus-flyway'
+
+    // hibernate
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache-kotlin'
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+
+    // resteasy
+    implementation 'io.quarkus:quarkus-resteasy'
+    implementation 'io.quarkus:quarkus-resteasy-jackson'
+
+    // kotlin
+    implementation 'io.quarkus:quarkus-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+
+    // arc DI
+    implementation 'io.quarkus:quarkus-arc'
+
+    // test
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.rest-assured:rest-assured'
+
+    // spring boot properties
+    implementation 'io.quarkus:quarkus-spring-boot-properties'
+
+    // axon
+    implementation "org.axonframework:axon-configuration"
+    implementation "org.axonframework:axon-modelling"
+    implementation "org.axonframework:axon-messaging"
+    implementation "org.axonframework:axon-server-connector"
+
+    implementation "info.cepheus:cepheus_axon_extension:0.0.2"
+    implementation "info.cepheus:cepheus_axon_quarkus_auto_configuration:0.0.1"
+
+    // reactor-core
+    implementation 'io.projectreactor:reactor-core:3.4.11'
+
+    implementation project(':cepheus_person_coreapi')
+}
+
+group 'info.cepheus'
+version '0.0.1'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+allOpen {
+    annotation("javax.ws.rs.Path")
+    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("io.quarkus.test.junit.QuarkusTest")
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+    kotlinOptions.javaParameters = true
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
+}

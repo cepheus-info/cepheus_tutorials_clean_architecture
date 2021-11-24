@@ -1,0 +1,60 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id "org.jetbrains.kotlin.plugin.allopen" apply false
+}
+
+group 'info.cepheus'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+configurations {quarkusDeployment}
+dependencies {
+quarkusDeployment 'io.quarkus:quarkus-datasource-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-flyway-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-smallrye-openapi-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-swagger-ui-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-vertx-http-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-caffeine-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-mutiny-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-netty-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-jdbc-postgresql-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-resteasy-common-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-arc-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-resteasy-jackson-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-hibernate-validator-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-jackson-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-resteasy-server-common-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-hibernate-orm-panache-kotlin-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-resteasy-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-spring-boot-properties-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-kotlin-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-hibernate-orm-panache-common-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-vertx-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-hibernate-orm-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-smallrye-context-propagation-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-agroal-deployment:2.4.2.Final'
+quarkusDeployment 'io.quarkus:quarkus-narayana-jta-deployment:2.4.2.Final'
+}
+task listQuarkusDependencies() {
+    File f = new File('C:\\Users\\wujun\\AppData\\Local\\Temp\\3947125475477535423.txt')
+    f.withPrintWriter('UTF8') { writer ->
+        configurations.quarkusDeployment.files.each { writer.println it }
+        def componentIds = configurations.quarkusDeployment.incoming.resolutionResult.allDependencies.collect { it.selected.id }
+        ArtifactResolutionResult result = dependencies.createArtifactResolutionQuery()
+            .forComponents(componentIds)
+            .withArtifacts(JvmLibrary, SourcesArtifact)
+            .execute()
+        def sourceArtifacts = []
+        result.resolvedComponents.each { ComponentArtifactsResult component ->
+            Set<ArtifactResult> sources = component.getArtifacts(SourcesArtifact)
+            sources.each { ArtifactResult ar ->
+                if (ar instanceof ResolvedArtifactResult) {
+                    writer.println ar.file
+                }
+            }
+        }
+    }
+}

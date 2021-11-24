@@ -1,0 +1,12 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id "org.jetbrains.kotlin.plugin.allopen" apply false
+}
+
+group 'info.cepheus'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}

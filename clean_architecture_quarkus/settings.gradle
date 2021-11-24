@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
+        id "${kotlinPluginId}" version "${kotlinPluginVersion}"
+        id "${kotlinAllOpenPluginId}" version "${kotlinPluginVersion}"
+    }
+}
+rootProject.name='clean_architecture_quarkus'
+includeFlat 'cepheus_person_coreapi'

@@ -1,0 +1,79 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group = 'info.cepheus'
+version = '0.0.1'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // spring boot starter
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-security"
+
+    // database connector
+    implementation 'mysql:mysql-connector-java'
+    implementation 'org.postgresql:postgresql:42.3.1'
+
+    // spring boot admin
+    implementation("de.codecentric:spring-boot-admin-starter-server:2.4.1")
+    implementation("de.codecentric:spring-boot-admin-starter-client:2.4.1")
+
+    // spring boot starter test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7', 'io.jsonwebtoken:jjwt-jackson:0.10.7'
+
+    // swagger
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // axon
+    implementation("org.axonframework:axon-micrometer:4.5.4")
+    implementation("org.axonframework.extensions.tracing:axon-tracing-spring-boot-starter:4.5")
+    implementation("org.axonframework:axon-spring-boot-starter:4.5.4")
+
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    // rxjava3
+    implementation group: 'io.reactivex.rxjava3', name: 'rxjava', version: '3.1.1'
+}
+
+test {
+    ignoreFailures = true
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
