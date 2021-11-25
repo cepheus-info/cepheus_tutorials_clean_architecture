@@ -5,11 +5,7 @@ plugins {
 }
 
 repositories {
-    mavenCentral() {
-        content {
-            excludeGroup('info.cepheus')
-        }
-    }
+    mavenCentral()
     mavenLocal()
 }
 

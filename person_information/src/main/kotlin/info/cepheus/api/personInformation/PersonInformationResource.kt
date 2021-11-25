@@ -1,4 +1,4 @@
-package info.cepheus.api
+package info.cepheus.api.personInformation
 
 import info.cepheus.query.personInformation.PersonInformation
 import info.cepheus.query.personInformation.PersonInformationRepository

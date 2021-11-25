@@ -4,3 +4,6 @@ build
 .idea
 .vscode
 .settings
+*.gradle
+!build.gradle
+!settings.gradle
