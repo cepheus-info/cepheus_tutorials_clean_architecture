@@ -2,6 +2,8 @@ package info.cepheus.config
 
 import info.cepheus.axon.infrastructure.boundary.query.QueryProcessor
 import info.cepheus.cepheus_axon_quarkus_auto_configuration.AxonAdapterConfiguration
+import info.cepheus.cepheus_axon_quarkus_auto_configuration.AxonStartupBuilder
+import io.quarkus.runtime.Startup
 import org.axonframework.config.Configuration
 import org.axonframework.config.Configurer
 import org.axonframework.eventhandling.TrackingEventProcessorConfiguration
@@ -21,10 +23,11 @@ import javax.validation.ValidatorFactory
 
 @Typed
 @ApplicationScoped
+@Startup
 class AxonConfiguration {
 
     @Inject
-    @Named(DATABASE_SCHEMA_QUERY_WRITE_SIDE)
+    @Named(DATABASE_BASE_SCHEMA)
     lateinit var dataSource: DataSource
 
     @Throws(SQLException::class)
@@ -36,17 +39,17 @@ class AxonConfiguration {
     lateinit var validatorFactory: ValidatorFactory
 
     @Inject
-    private lateinit var defaultAxonConfigurer: Configurer
+    lateinit var axonStartupBuilder: AxonStartupBuilder
 
     @Inject
-    private lateinit var axonAdapterConfiguration: AxonAdapterConfiguration
+    lateinit var axonAdapterConfiguration: AxonAdapterConfiguration
 
     /**
      * startup
      */
     @PostConstruct
-    private fun startUp() {
-        defaultAxonConfigurer
+    fun startUp() {
+        axonStartupBuilder.build(this.javaClass.classLoader)
                 .apply { // configureEventProcessing
                     val epc = this.eventProcessing()
                     epc.registerSubscribingEventProcessor(QueryProcessor.SUBSCRIBING.name)
@@ -76,7 +79,11 @@ class AxonConfiguration {
 
     // Note Query-Side
     private fun jdbcTokenStore(config: Configuration): JdbcTokenStore {
-        val schema = TokenSchema.builder().setTokenTable("$DATABASE_SCHEMA_QUERY_WRITE_SIDE.$DATABASE_TABLE_TOKEN").build()
+        val schema = TokenSchema.builder()
+                .setTokenTable("$DATABASE_BASE_SCHEMA.$DATABASE_TABLE_TOKEN")
+                .setProcessorNameColumn(COLUMN_PROCESSOR_NAME)
+                .setTokenTypeColumn(COLUMN_TOKEN_TYPE)
+                .build()
         return JdbcTokenStore.builder()
                 .connectionProvider { getConnection() }
                 // TODO: serialize content to jsonb or bytea should be considered carefully.
@@ -95,7 +102,12 @@ class AxonConfiguration {
 
     companion object {
         private val LOGGER = Logger.getLogger(AxonConfiguration::class.java.name)
-        private const val DATABASE_SCHEMA_QUERY_WRITE_SIDE = "query_write_context"
+
+        // Note: maintain all token_entries in base schema.
+        private const val DATABASE_BASE_SCHEMA = "base"
         private const val DATABASE_TABLE_TOKEN = "token_entry"
+        private const val COLUMN_PROCESSOR_NAME = "processor_name"
+        private const val COLUMN_TOKEN_TYPE = "token_type"
     }
 }
+

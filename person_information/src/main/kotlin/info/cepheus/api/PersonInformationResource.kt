@@ -10,20 +10,19 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Path("/hello")
+@Produces(MediaType.APPLICATION_JSON)
 class PersonInformationResource {
 
     @Inject
     lateinit var personInformationRepository: PersonInformationRepository
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
     fun list(): List<PersonInformation> {
         return personInformationRepository.listAll()
     }
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     fun findById(@PathParam("id") id: String): PersonInformation? {
         return personInformationRepository.findById(id)
     }

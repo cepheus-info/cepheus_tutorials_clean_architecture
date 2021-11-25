@@ -12,10 +12,13 @@ open class DefaultTenantResolver : TenantResolver {
     lateinit var context: RoutingContext
 
     override fun getDefaultTenantId(): String {
-        return "base"
+        return CurrentTenant.defaultTenantId
     }
 
     override fun resolveTenantId(): String {
+        if (CurrentTenant.isNotEmpty()) {
+            return CurrentTenant.tenantId!!
+        }
         val path = context.request().path()
         return if (path.startsWith("/cd")) {
             "cd"
