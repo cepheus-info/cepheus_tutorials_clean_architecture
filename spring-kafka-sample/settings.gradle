@@ -6,9 +6,8 @@ pluginManagement {
     }
     plugins {
         id "${kotlinPluginId}" version "${kotlinPluginVersion}"
-        id "${kotlinAllOpenPluginId}" version "${kotlinPluginVersion}"
         id "${springPluginId}" version "${springPluginVersion}"
         id "${springDependencyPluginId}" version "${springDependencyPluginVersion}"
     }
 }
-rootProject.name = 'clean_architecture_spring'
+rootProject.name = 'spring-kafka-sample'

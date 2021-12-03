@@ -16,14 +16,3 @@ data class CheckedBusinessError(
         val code: CheckedBusinessErrorCode,
         val message: String
 )
-
-// CheckedBusinessException is non-transient and should not be treated as RuntimeException
-open class CheckedBusinessException(
-        val errorMessage: String,
-        val errorCode: CheckedBusinessErrorCode
-) : Exception(errorMessage)
-
-data class AlwaysTrueException(val reason: String?) : CheckedBusinessException(
-        String.format("Given expression %s always true", reason),
-        CheckedBusinessErrorCode.ALWAYS_TRUE
-)

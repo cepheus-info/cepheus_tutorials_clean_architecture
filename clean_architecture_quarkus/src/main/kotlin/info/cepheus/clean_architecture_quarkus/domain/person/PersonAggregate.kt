@@ -7,7 +7,6 @@ import info.cepheus.cepheus_person_coreapi.PersonCreatedEvent
 import info.cepheus.clean_architecture_quarkus.coreapi.ExecutionResult
 import info.cepheus.clean_architecture_quarkus.coreapi.command.CreateSinglePersonCommand
 import info.cepheus.clean_architecture_quarkus.coreapi.exception.NullOrEmptyNameException
-import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateCreationPolicy
 import org.axonframework.modelling.command.AggregateLifecycle
@@ -25,12 +24,14 @@ class PersonAggregate {
     @CommandModelCommandHandler
     @CreationPolicy(value = AggregateCreationPolicy.CREATE_IF_MISSING)
     fun handle(command: CreateSinglePersonCommand): ExecutionResult<*> {
+
         Thread.sleep(1000L)
         if (command.name.isNullOrBlank()) {
             throw NullOrEmptyNameException("name is null or empty, id: ${command.personId}")
         }
         AggregateLifecycle.apply(PersonCreatedEvent(command.personId!!, command.name!!))
-        return ExecutionResult.success()
+        val success: ExecutionResult<*> = ExecutionResult.success()
+        return ExecutionResult.success(command.personId)
     }
 
     @EventSourcingHandler

@@ -8,6 +8,8 @@ pluginManagement {
         id "${quarkusPluginId}" version "${quarkusPluginVersion}"
         id "${kotlinPluginId}" version "${kotlinPluginVersion}"
         id "${kotlinAllOpenPluginId}" version "${kotlinPluginVersion}"
+        id "${springPluginId}" version "${springPluginVersion}"
+        id "${springDependencyPluginId}" version "${springDependencyPluginVersion}"
     }
 }
 rootProject.name="cepheus_tutorials_clean_architecture"
@@ -15,3 +17,4 @@ include 'clean_architecture_quarkus'
 include 'clean_architecture_spring'
 include 'person_information'
 include 'cepheus_person_coreapi'
+include 'spring-kafka-sample'

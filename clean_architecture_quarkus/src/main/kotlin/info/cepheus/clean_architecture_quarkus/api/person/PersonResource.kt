@@ -1,5 +1,6 @@
 package info.cepheus.clean_architecture_quarkus.api.person
 
+import info.cepheus.clean_architecture_quarkus.application.person.CreatePersonDto
 import info.cepheus.clean_architecture_quarkus.application.person.PersonService
 import info.cepheus.clean_architecture_quarkus.coreapi.ExecutionResult
 import info.cepheus.clean_architecture_quarkus.coreapi.ExecutionStatus
@@ -44,13 +45,15 @@ class PersonResource {
 
         // use coroutine to make use of await & suspend function.
         GlobalScope.launch(coroutineExceptionHandler) {
-            val executionResult = personService.createAsync(person.withId(id)).await()
+            val executionResult = personService.createAsync(person).await()
+
             val result = when (executionResult.status) {
                 ExecutionStatus.SUCCESS -> {
+                    val personId = executionResult.payload
                     val r = object {
-                        val identifier = id
+                        val identifier = personId
                     }
-                    Response.created(URI.create("/api/person/${id}")).entity(r).build()
+                    Response.created(URI.create("/api/person/${personId}")).entity(r).build()
                 }
                 ExecutionStatus.FAILED -> {
                     Response.serverError().entity(executionResult).build()
@@ -61,19 +64,17 @@ class PersonResource {
         }
     }
 
-
+    @POST
     @Path("callback")
     fun createCallback(@RequestBody person: CreatePersonDto, @Suspended asyncResponse: AsyncResponse) {
-        val id = UUID.randomUUID().toString()
-
-        personService.createAsync(person.withId(id)).thenAccept {
-            @SuppressWarnings
+        personService.createAsync(person).thenAccept {
             val result = when (it.status) {
                 ExecutionStatus.SUCCESS -> {
+                    val personId = it.payload
                     val r = object {
-                        val identifier = id
+                        val identifier = personId
                     }
-                    Response.created(URI.create("/api/person/${id}")).entity(r).build()
+                    Response.created(URI.create("/api/person/${personId}")).entity(r).build()
                 }
                 ExecutionStatus.FAILED -> {
                     Response.serverError().entity(it).build()

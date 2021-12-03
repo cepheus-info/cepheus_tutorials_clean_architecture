@@ -11,4 +11,5 @@ pluginManagement {
     }
 }
 rootProject.name='clean_architecture_quarkus'
-includeFlat 'cepheus_person_coreapi'
+include 'cepheus_person_coreapi'
+project(':cepheus_person_coreapi').projectDir = file('../cepheus_person_coreapi')

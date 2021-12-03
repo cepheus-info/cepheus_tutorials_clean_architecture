@@ -1,4 +1,4 @@
-package info.cepheus.clean_architecture_quarkus.api.person
+package info.cepheus.clean_architecture_quarkus.application.person
 
 import info.cepheus.clean_architecture_quarkus.coreapi.command.CreateSinglePersonCommand
 import org.apache.commons.beanutils.PropertyUtils

@@ -10,5 +10,6 @@ pluginManagement {
         id "${kotlinAllOpenPluginId}" version "${kotlinPluginVersion}"
     }
 }
-rootProject.name='person_information'
-includeFlat 'cepheus_person_coreapi'
+rootProject.name = 'person_information'
+include 'cepheus_person_coreapi'
+project(':cepheus_person_coreapi').projectDir = '../cepheus_person_coreapi'

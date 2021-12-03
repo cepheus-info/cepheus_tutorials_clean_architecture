@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.6'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
 }
@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation enforcedPlatform("${axonPlatformGroupId}:${axonPlatformArtifactId}:${axonPlatformVersion}")
     // spring boot starter
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -50,9 +51,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // axon
-    implementation("org.axonframework:axon-micrometer:4.5.4")
+    implementation("org.axonframework:axon-micrometer")
     implementation("org.axonframework.extensions.tracing:axon-tracing-spring-boot-starter:4.5")
-    implementation("org.axonframework:axon-spring-boot-starter:4.5.4")
+    implementation("org.axonframework:axon-spring-boot-starter")
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
