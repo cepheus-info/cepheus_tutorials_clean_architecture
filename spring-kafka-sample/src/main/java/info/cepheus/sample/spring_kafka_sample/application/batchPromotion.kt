@@ -1,6 +1,7 @@
 package info.cepheus.sample.spring_kafka_sample.application
 
-data class BatchPromotionDto(
+data class BatchPromotionMessage(
+        var transactionId: String? = null,
         var ids: List<String>? = null,
         var changes: List<PromotionDto>? = null,
 )

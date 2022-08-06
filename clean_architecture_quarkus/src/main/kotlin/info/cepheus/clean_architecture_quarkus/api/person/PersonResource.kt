@@ -6,6 +6,7 @@ import info.cepheus.clean_architecture_quarkus.coreapi.ExecutionResult
 import info.cepheus.clean_architecture_quarkus.coreapi.ExecutionStatus
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
+import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody
 import java.net.URI
 import java.util.*
@@ -26,6 +27,9 @@ class PersonResource {
 
     @Inject
     lateinit var personService: PersonService
+
+    @ConfigProperty(name = "quarkus.oauth2.client-id")
+    lateinit var clientId: String
 
     /**
      * Note that in JAX/RS 2, we use @Suspended to return AsyncResponse
@@ -52,6 +56,7 @@ class PersonResource {
                     val personId = executionResult.payload
                     val r = object {
                         val identifier = personId
+                        val clientId = this@PersonResource.clientId
                     }
                     Response.created(URI.create("/api/person/${personId}")).entity(r).build()
                 }

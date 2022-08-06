@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class BatchSubsidyHandler {
 
     @KafkaHandler()
-    public void on(BatchSubsidyDto foo, Acknowledgment acknowledgment) throws InterruptedException {
+    public void on(BatchSubsidyMessage foo, Acknowledgment acknowledgment) throws InterruptedException {
         System.out.println("Received subsidy: " + foo);
         Thread.sleep(10000);
         acknowledgment.acknowledge();

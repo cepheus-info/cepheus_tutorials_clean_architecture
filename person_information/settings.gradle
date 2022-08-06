@@ -12,4 +12,4 @@ pluginManagement {
 }
 rootProject.name = 'person_information'
 include 'cepheus_person_coreapi'
-project(':cepheus_person_coreapi').projectDir = '../cepheus_person_coreapi'
+project(':cepheus_person_coreapi').projectDir = file('../cepheus_person_coreapi')

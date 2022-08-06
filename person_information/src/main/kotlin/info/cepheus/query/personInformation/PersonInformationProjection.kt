@@ -31,7 +31,7 @@ class PersonInformationProjection {
             it.tenantId = CurrentTenant.defaultTenantId
 
             PersonInformation().run {
-                this.id = event.personId
+                this.id = UUID.fromString(event.personId)
                 this.name = event.name
                 // persist & clear
                 this.persist()

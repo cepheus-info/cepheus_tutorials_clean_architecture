@@ -1,21 +1,14 @@
 package info.cepheus.sample.spring_kafka_sample.api;
 
-import info.cepheus.sample.spring_kafka_sample.application.BatchPromotionDto;
-import info.cepheus.sample.spring_kafka_sample.application.BatchSubsidyDto;
+import info.cepheus.sample.spring_kafka_sample.application.BatchPromotionMessage;
+import info.cepheus.sample.spring_kafka_sample.application.BatchSubsidyMessage;
 import info.cepheus.sample.spring_kafka_sample.coreapi.LongRunningProcess;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StoreQueryParameters;
-import org.apache.kafka.streams.state.QueryableStoreType;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController("/api/person")
@@ -23,25 +16,25 @@ import java.util.UUID;
 public class PersonController {
 
     @Autowired
-    private KafkaTemplate<Object, Object> template;
-//
+    private KafkaTemplate<Object, Object> kafkaTemplate;
 //    @Autowired
 //    private StreamsBuilderFactoryBean factoryBean;
 
     @PostMapping(value = "/subsidy/:batchUpdate")
     @ResponseBody
-    public ResponseEntity<String> batchSubsidyUpdate(@RequestBody BatchSubsidyDto batchSubsidyDto) {
-        String id = UUID.randomUUID().toString();
-        this.template.send(LongRunningProcess.BatchSubsidy, id, batchSubsidyDto);
-        return ResponseEntity.accepted().body(id);
+    public ResponseEntity<String> batchSubsidyUpdate(@RequestBody BatchSubsidyMessage batchSubsidyDto) {
+        String transactionId = UUID.randomUUID().toString();
+        batchSubsidyDto.setTransactionId(transactionId);
+        this.kafkaTemplate.send(LongRunningProcess.BatchSubsidy, transactionId, batchSubsidyDto);
+        return ResponseEntity.accepted().body(transactionId);
     }
 
     @PostMapping(value = "/promotion/:batchPromote")
     @ResponseBody
-    public ResponseEntity<String> batchPromote(@RequestBody BatchPromotionDto batchPromotionDto) {
-        String id = UUID.randomUUID().toString();
-        this.template.send(LongRunningProcess.BatchPromotion, id, batchPromotionDto);
-        return ResponseEntity.accepted().body(id);
+    public ResponseEntity<String> batchPromote(@RequestBody BatchPromotionMessage batchPromotionDto) {
+        String transactionId = UUID.randomUUID().toString();
+        this.kafkaTemplate.send(LongRunningProcess.BatchPromotion, transactionId, batchPromotionDto);
+        return ResponseEntity.accepted().body(transactionId);
     }
 
 //    @GetMapping
